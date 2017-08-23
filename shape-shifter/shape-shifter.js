@@ -4,22 +4,7 @@
  * A canvas experiment
  */
 
-var S = {
-  init: function () {
-
-    S.Drawing.init('.canvas');
-    S.ShapeBuilder.init();
-    S.UI.init();
-    document.body.classList.add('body--ready');
-
-    S.UI.simulate('miley|你在期着什么？');
-    S.Drawing.loop(S.Shape.render);
-  }
-};
-
-
-window.addEventListener('load', S.init);
-
+var S = {};
 
 S.Drawing = (function () {
   var canvas,
@@ -166,7 +151,7 @@ S.UI = (function () {
 
 //    overlay.classList.remove('overlay--visible');
     sequence = typeof(value) === 'object' ? value : sequence.concat(value.split('|'));
-    input.value = '';
+//    input.value = '';
     checkInputWidth();
 
     timedAction(function () {
@@ -234,20 +219,24 @@ S.UI = (function () {
   }
 
   function checkInputWidth() {
+	/*
     if (input.value.length > 18) {
       ui.classList.add('ui--wide');
     } else {
       ui.classList.remove('ui--wide');
     }
+    
 
     if (firstAction && input.value.length > 0) {
       ui.classList.add('ui--enter');
     } else {
       ui.classList.remove('ui--enter');
     }
+    */
   }
 
   function bindEvents() {
+	  /*
     document.body.addEventListener('keydown', function (e) {
       input.focus();
 
@@ -257,6 +246,7 @@ S.UI = (function () {
         performAction(input.value);
       }
     });
+    */
 
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
@@ -266,11 +256,12 @@ S.UI = (function () {
       }, 500);
     });
 
+    /*
     input.addEventListener('input', checkInputWidth);
     input.addEventListener('change', checkInputWidth);
     input.addEventListener('focus', checkInputWidth);
 
-    /*
+    
     help.addEventListener('click', function () {
       overlay.classList.toggle('overlay--visible');
 
@@ -324,7 +315,7 @@ S.UI = (function () {
   return {
     init: function () {
       bindEvents();
-      input.focus();
+//      input.focus();
 
       if (isTouch) {
         document.body.classList.add('touch');
