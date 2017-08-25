@@ -55,11 +55,27 @@ $(function() {
         // 性别
         this.gender = "";
         
+        // 相识
+        this.met = function() {
+            
+        }
+        
+        // 约会
+        this.appointment = function() {
+            
+        }
+        
         // 恋爱
         this.love = function(opersion) {
             
         }
     };
+    
+    // 恋人对象
+    function Lover = function() {
+        
+    }
+    
 
     // 设置$miley对象
     var $miley = new Person();
