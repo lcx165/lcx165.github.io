@@ -1,10 +1,9 @@
 
-
-
-
-
 // 页面加载完成事件
 $(function() {
+    
+
+    
 	// 展示carvas动画
     S.Drawing.init('.canvas');
     S.ShapeBuilder.init();
@@ -55,28 +54,117 @@ $(function() {
         // 性别
         this.gender = "";
         
+        // 设置对象
+        this.object = null;
+        
+        // 俩人状态
+        this.status = 0;
+        
+        var that = this;
+        
+        // 设置状态并显示一段信息
+        function setStatus(status_number, msg) {
+            that.status = status_number;
+            that.object.status = status_number;
+            
+            if (typeof(msg) == "string" && msg) {
+                S.UI.simulate(msg);
+            }
+            return true;
+        }
+        
+        // 检查状态是否到达或超过
+        function checkStatus(status, func_max, func_min) {
+            var ret = false;
+            if (!(that.object instanceof Person)) {
+                // 缺少对象
+                console.info("你现在还没有对象，怎么做这些事？\n先找个对象 [setObject]");
+            } else if (that.status >= status) {
+                // 已经超越了当前状态（含）
+                if (typeof(func_max) == "function") {
+                    func_max();
+                }
+            } else if (that.status < status - 1) {
+                // 还没到当前状态的前一个状态
+                if (typeof(func_min) == "function") {
+                    func_min();
+                }
+            } else {
+                ret = true;
+            }
+            
+            return ret;
+        }
+        
+        // 有对象的情况下执行动作
+        function action(status, max_msg, min_msg, m_msg, f_msg) {
+            // 检查状态
+            if (!checkStatus(status, function() {
+                console.info(max_msg);
+            }, function() {
+                console.info(min_msg);
+            })) {
+                return false;
+            }
+            
+            if (that.gender == "男") {
+                var msg = m_msg;
+            } else {
+                var msg = f_msg;
+            }
+            
+            return setStatus(status, msg);
+        }
+        
+        // 设置对象
+        this.setObject = function(o_person) {
+            var ret = false;
+            if (!(o_person instanceof Person)) {
+                // 判断传入数据格式
+                console.warn("指定对象不是人类 [Person]");
+            } else {
+                this.object = o_person;
+                o_person.object = this;
+                console.info("设置对象成功");
+                ret = true;
+            }
+            return ret;
+        }
+        
         // 相识
         this.met = function() {
-            
+            return action(
+                1,
+                "俩人已经认识了~",
+                null,
+                "这世间怎会有如此清新脱俗的女子！",
+                "嗯？"
+            );
         }
         
-        // 约会
+        // 相约
         this.appointment = function() {
-            
+            return action(
+                2,
+                "已经约过很多次了噢~",
+                "先相识才可以约会噢 [met]",
+                "一起看电影呀？",
+                "天真热~"
+            );
         }
         
-        // 恋爱
-        this.love = function(opersion) {
-            
+        // Love
+        this.love = function() {
+            return action(
+                2,
+                "恋爱会一直进行的！",
+                "相恋不能跳过约会环节噢 [appointment]",
+                "你长的真美",
+                "你说嘛！"
+            );
         }
-    };
-    
-    // 恋人对象
-    function Lover = function() {
-        
     }
     
-
     // 设置$miley对象
     var $miley = new Person();
     var $miley_native = new PersonNative($miley);
@@ -85,7 +173,7 @@ $(function() {
     window.$miley = $miley;
     
     // 设置$leelmes对象
-    var $leelmes = new Persion();
+    var $leelmes = new Person();
     var $leelmes_native = new PersonNative($leelmes);
     $leelmes_native.setBirth(1988, 7, 15);
     $leelmes_native.set("gender", "男");
