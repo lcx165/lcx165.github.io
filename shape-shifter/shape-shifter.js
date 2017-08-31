@@ -305,11 +305,12 @@ S.UI = (function () {
         }
       }
     });
-    */
+
 
     canvas.addEventListener('click', function () {
       overlay.classList.remove('overlay--visible');
     });
+        */
   }
 
   return {

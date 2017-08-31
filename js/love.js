@@ -10,10 +10,16 @@ $(function() {
     S.UI.init();
     $("body").addClass('body--ready');
 
-    S.UI.simulate('miley|你在期待着什么？');
+    S.UI.simulate("miley|你在期待着什么？");
     S.Drawing.loop(S.Shape.render);
     
-    // 人物属性
+    // 函数隐藏实体
+    function func(callback) {
+        callback.toString = function() {
+            return "<function>";
+        }
+        return callback;
+    }
     
     // 原生不开放的设置方法
     function PersonNative(obj) {
@@ -60,6 +66,7 @@ $(function() {
         // 俩人状态
         this.status = 0;
         
+        // that对象
         var that = this;
         
         // 设置状态并显示一段信息
@@ -83,11 +90,15 @@ $(function() {
                 // 已经超越了当前状态（含）
                 if (typeof(func_max) == "function") {
                     func_max();
+                } else {
+                    ret = true;
                 }
             } else if (that.status < status - 1) {
                 // 还没到当前状态的前一个状态
                 if (typeof(func_min) == "function") {
                     func_min();
+                } else {
+                    ret = true;
                 }
             } else {
                 ret = true;
@@ -116,8 +127,22 @@ $(function() {
             return setStatus(status, msg);
         }
         
+        // 检查是否相恋，并展示相应文案
+        function checkLove(msg) {
+            if (!checkStatus(3, null, function() {
+                console.info("还没相恋呢，不要太着急 [love]");
+            })) {
+                return false;
+            }
+            
+            S.UI.simulate(msg);
+            return true
+        }
+        
+        // ------------------------------------------------
+        
         // 设置对象
-        this.setObject = function(o_person) {
+        this.setObject = func(function(o_person) {
             var ret = false;
             if (!(o_person instanceof Person)) {
                 // 判断传入数据格式
@@ -129,21 +154,21 @@ $(function() {
                 ret = true;
             }
             return ret;
-        }
+        });
         
         // 相识
-        this.met = function() {
+        this.met = func(function() {
             return action(
                 1,
                 "俩人已经认识了~",
                 null,
-                "这世间怎会有如此清新脱俗的女子！",
+                "这世间怎会有如此|清新脱俗的女子",
                 "嗯？"
             );
-        }
+        });
         
         // 相约
-        this.appointment = function() {
+        this.appointment = func(function() {
             return action(
                 2,
                 "已经约过很多次了噢~",
@@ -151,18 +176,33 @@ $(function() {
                 "一起看电影呀？",
                 "天真热~"
             );
-        }
+        });
         
         // Love
-        this.love = function() {
+        this.love = func(function() {
             return action(
-                2,
+                3,
                 "恋爱会一直进行的！",
                 "相恋不能跳过约会环节噢 [appointment]",
                 "你长的真美",
                 "你说嘛！"
             );
-        }
+        });
+        
+        // 自悟
+        this.ml = func(function() {
+            return checkLove("根据当地政策|内容不予展示");
+        });
+        
+        // 结婚
+        this.marry = func(function() {
+            return checkLove("这一天|一定会来的");
+        });
+        
+        // 生日
+        this.birthday = func(function() {
+            
+        });
     }
     
     // 设置$miley对象
