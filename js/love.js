@@ -2,17 +2,6 @@
 // 页面加载完成事件
 $(function() {
     
-
-    
-	// 展示carvas动画
-    S.Drawing.init('.canvas');
-    S.ShapeBuilder.init();
-    S.UI.init();
-    $("body").addClass('body--ready');
-
-    S.UI.simulate("miley|你在期待着什么？");
-    S.Drawing.loop(S.Shape.render);
-    
     // 函数隐藏实体
     function func(callback) {
         callback.toString = function() {
@@ -199,11 +188,33 @@ $(function() {
             return checkLove("这一天|一定会来的");
         });
         
+        // 检查今天是不是生日
+        this.checkBirthday = func(function() {
+            var now = new Date();
+            return now.getMonth() == this.birthday.cMonth - 1 && now.getDate() == this.birthday.cDay;
+        })
+        
         // 生日
-        this.birthday = func(function() {
-            
+        this.happyBirthday = func(function() {
+            if (this.checkBirthday()) {
+                S.UI.simulate("Happy Birthday !");
+            } else {
+                console.info("生日还没到噢！");
+            }
         });
+
     }
+    
+    // title滚动
+    function scrollTitle() {
+        var title = document.title.replace("🎂", "_");
+        var firstch = title.charAt(0);  
+        var leftstr = title.substring(1, title.length);  
+        title = leftstr + firstch;
+        title = title.replace("_", "🎂");
+        document.title = title;
+    }  
+    setInterval(scrollTitle, 300);  
     
     // 设置$miley对象
     var $miley = new Person();
@@ -219,4 +230,18 @@ $(function() {
     $leelmes_native.set("gender", "男");
     window.$leelmes = $leelmes;
     
+    // 确认初始文案，生日当天不同
+    init_msg = "miley|你在期待着什么"
+    if ($miley.checkBirthday()) {
+        init_msg = "miley|Happy Birthday";
+        document.title="🎂miley🎂Happy🎂Birthday";
+    }
+    
+    // 展示carvas动画
+    S.Drawing.init('.canvas');
+    S.ShapeBuilder.init();
+    S.UI.init();
+    $("body").addClass('body--ready');
+    S.UI.simulate(init_msg);
+    S.Drawing.loop(S.Shape.render);
 });
