@@ -152,7 +152,7 @@ $(function() {
                 "俩人已经认识了~",
                 null,
                 "这世间怎会有如此|清新脱俗的女子",
-                "嗯？"
+                "他长得真帅"
             );
         });
         
@@ -244,4 +244,7 @@ $(function() {
     $("body").addClass('body--ready');
     S.UI.simulate(init_msg);
     S.Drawing.loop(S.Shape.render);
+
+    // 输出本页对象
+    console.info("本页存在对象：$miley $leelmes")
 });
